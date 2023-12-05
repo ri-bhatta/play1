@@ -9,16 +9,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-
-      - name: Install CRC CLI
-        uses: redhat-actions/crc@latest # Specify the latest CRC version
+      - name: Install CRDA
+        uses: redhat-actions/openshift-tools-installer@v1
         with:
-          crc-version: latest
-
-      - name: Start CRC cluster
-        run: crc start
-
-      - name: Deploy application
-        run: crc oc new-app -f deployment.yaml
+          source: github
+          crda: latest
