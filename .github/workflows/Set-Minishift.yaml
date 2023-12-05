@@ -17,10 +17,10 @@ jobs:
         run: tar -xvf minishift
 
       - name: Set executable permissions
-        run: chmod +x minishift-1.37.2-linux-amd64
+        run: chmod +x minishift-1.37.3-linux-amd64
 
       - name: Rename binary
-        run: mv minishift-1.37.2-linux-amd64 minishift
+        run: mv minishift-1.37.3-linux-amd64 minishift
 
       - name: Install Minishift
         run: sudo mv minishift /usr/local/bin/
