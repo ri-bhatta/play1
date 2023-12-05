@@ -13,11 +13,10 @@ jobs:
     - name: Install Minishift Dependencies
       run: |
         sudo apt-get update
-        sudo apt-get install -y socat libvirt-daemon qemu-kvm
+        sudo apt-get install -y socat libvirt-daemon qemu-kvm docker.io
 
-    - name: Install VirtualBox
-      run: |
-        sudo apt-get install -y virtualbox
+    - name: Start Docker
+      run: sudo service docker start
 
     - name: Download and Install Minishift
       run: |
@@ -27,10 +26,11 @@ jobs:
         rm -rf minishift-1.34.0-linux-amd64
 
     - name: Start Minishift
-      run: minishift start --vm-driver=virtualbox --profile=myprofile --cpus=2 --memory=4GB
+      run: |
+        sudo minishift start --vm-driver=none --profile=myprofile --cpus=2 --memory=4GB
 
     - name: Configure OpenShift CLI (oc)
-      run: eval $(minishift oc-env)
+      run: eval $(sudo minishift oc-env)
 
     - name: Deploy Application
       run: |
@@ -38,4 +38,4 @@ jobs:
         # For example, you can use 'oc' commands to deploy your application
 
     - name: Stop Minishift
-      run: minishift stop --profile=myprofile
+      run: sudo minishift stop --profile=myprofile
