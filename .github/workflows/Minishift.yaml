@@ -1,37 +1,35 @@
-name: Minishift Setup
+name: Install Minishift
 
-on: [push]
+on:
+  push:
+    branches: [ main ]
 
 jobs:
-  build:
+  install:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout Repository
-      uses: actions/checkout@v2
+      - name: Checkout repository
+        uses: actions/checkout@v2
 
-    - name: Install Minishift Dependencies
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y socat libvirt-daemon qemu-kvm
+      - name: Download Minishift
+        uses: hashicorp/setup-minishift@v2.4.2
+        with:
+          version: 'latest'
 
-    - name: Download and Install Minishift
-      run: |
-        wget https://github.com/minishift/minishift/releases/download/v1.34.0/minishift-1.34.3-linux-amd64.tgz
-        tar -xzf minishift-1.34.3-linux-amd64.tgz
-        sudo mv minishift-1.34.3-linux-amd64/minishift /usr/local/bin/
-        rm -rf minishift-1.34.3-linux-amd64
+      - name: Configure Minishift
+        run: |
+          minishift config set memory 4096
+          minishift config set disk 50GB
 
-    - name: Start Minishift
-      run: minishift start --vm-driver=docker --profile=myprofile --cpus=2 --memory=4GB
+      - name: Start Minishift cluster
+        run: |
+          minishift start
 
-    - name: Configure OpenShift CLI (oc)
-      run: eval $(minishift oc-env)
+      - name: Wait for Minishift to be ready
+        run: |
+          while [ "$(minishift status | grep -c 'Running')" -eq 0 ]; do sleep 5; done
 
-    - name: Deploy Application
-      run: |
-        # Your deployment steps go here
-        # For example, you can use 'oc' commands to deploy your application
-
-    - name: Stop Minishift
-      run: minishift stop --profile=myprofile
+      - name: Verify Minishift is running
+        run: |
+          minishift status
