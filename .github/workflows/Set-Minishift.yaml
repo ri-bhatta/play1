@@ -7,13 +7,13 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
+      - name: Checkout repository
+        uses: actions/checkout@v2
 
-    - name: Set up Minishift
-      run: |
-        MINISHIFT_VERSION=v1.34.3
-        wget -O minishift https://github.com/minishift/minishift/releases/download/${MINISHIFT_VERSION}/minishift-${MINISHIFT_VERSION}-linux-amd64
-        chmod +x minishift
-        sudo mv minishift /usr/local/bin/
-        minishift start --cpus 2 --memory 4096
+      - name: Set up Minishift
+        run: |
+          MINISHIFT_VERSION=v1.34.3
+          wget https://github.com/minishift/minishift/releases/download/${MINISHIFT_VERSION}/minishift-${MINISHIFT_VERSION}-linux-amd64 -O minishift
+          chmod +x minishift
+          sudo mv minishift /usr/local/bin/
+          minishift start --cpus 2 --memory 4096
