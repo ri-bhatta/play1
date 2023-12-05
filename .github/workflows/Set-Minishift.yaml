@@ -12,8 +12,7 @@ jobs:
 
       - name: Set up Minishift
         run: |
-          MINISHIFT_VERSION=v1.34.3
-          wget https://github.com/minishift/minishift/releases/tag/${MINISHIFT_VERSION}/minishift-${MINISHIFT_VERSION}-linux-amd64.tgz -O minishift
+          wget https://github.com/minishift/minishift/releases/download/v1.34.3/minishift-1.34.3-linux-amd64.tgz -O minishift
           chmod +x minishift
           sudo mv minishift /usr/local/bin/
           minishift start --cpus 2 --memory 4096
