@@ -13,11 +13,11 @@ jobs:
     - name: Install Minishift Dependencies
       run: |
         sudo apt-get update
-        sudo apt-get install -y socat libvirt-daemon qemu-kvm curl
+        sudo apt-get install -y socat libvirt-daemon qemu-kvm
 
     - name: Download and Install Minishift
       run: |
-        curl -LO https://github.com/minishift/minishift/releases/download/v1.34.0/minishift-1.34.0-linux-amd64.tgz
+        wget https://github.com/minishift/minishift/releases/download/v1.34.0/minishift-1.34.0-linux-amd64.tgz
         tar -xzf minishift-1.34.0-linux-amd64.tgz
         sudo mv minishift-1.34.0-linux-amd64/minishift /usr/local/bin/
         rm -rf minishift-1.34.0-linux-amd64
