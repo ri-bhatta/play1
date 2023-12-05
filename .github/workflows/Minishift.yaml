@@ -1,35 +1,42 @@
-name: Install Minishift
+name: CRC Setup
 
-on:
-  push:
-    branches: [ main ]
+on: [push]
 
 jobs:
-  install:
+  build:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
+    - name: Checkout Repository
+      uses: actions/checkout@v2
 
-      - name: Download Minishift
-        uses: hashicorp/setup-minishift@v2.4.2
-        with:
-          version: 'latest'
+    - name: Install CRC Dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y libvirt-clients libvirt-daemon-system
 
-      - name: Configure Minishift
-        run: |
-          minishift config set memory 4096
-          minishift config set disk 50GB
+    - name: Download and Install CRC
+      run: |
+        wget https://github.com/code-ready/crc/releases/download/1.29.0/crc-linux-amd64.tar.xz
+        tar -xJf crc-linux-amd64.tar.xz
+        sudo mv crc-linux-*/crc /usr/local/bin/
+        rm -rf crc-linux-*
 
-      - name: Start Minishift cluster
-        run: |
-          minishift start
+    - name: Start CRC
+      run: crc setup
+      continue-on-error: true  # CRC setup may ask for additional dependencies, ignore for now
 
-      - name: Wait for Minishift to be ready
-        run: |
-          while [ "$(minishift status | grep -c 'Running')" -eq 0 ]; do sleep 5; done
+    - name: Start CRC (Retry)
+      run: crc start --memory 8Gi
+      continue-on-error: true  # CRC start may need to be retried if there were setup issues
 
-      - name: Verify Minishift is running
-        run: |
-          minishift status
+    - name: Set CRC Environment Variables
+      run: eval $(crc oc-env)
+
+    - name: Deploy Application
+      run: |
+        # Your deployment steps go here
+        # For example, you can use 'oc' commands to deploy your application
+
+    - name: Stop CRC
+      run: crc stop
