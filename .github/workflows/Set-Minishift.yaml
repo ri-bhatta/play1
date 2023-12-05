@@ -10,6 +10,10 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
+      - name: Set up environment variables
+        run: |
+          MINISHIFT_VERSION=v1.34.3
+
       - name: Download Minishift
         id: download-minishift
         uses: wget-actions/wget@v2.3.1
