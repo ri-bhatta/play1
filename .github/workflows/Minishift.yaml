@@ -1,10 +1,6 @@
 name: Deploy to OpenShift and Verify
 
-on:
-  workflow_run:
-    workflows: ["Build and Push Docker Image"]
-    types:
-      - completed
+on: [push]
 
 jobs:
   deploy-and-verify:
