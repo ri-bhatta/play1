@@ -1,0 +1,27 @@
+name: Set up Minishift
+
+on: [push]
+
+jobs:
+  setup-minishift:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Download Minishift
+        id: download-minishift
+        uses: wget-actions/wget@v2.3.1
+        with:
+          url: https://github.com/minishift/minishift/releases/download/${{ env.MINISHIFT_VERSION }}/minishift-${{ env.MINISHIFT_VERSION }}-linux-amd64
+          dest: minishift
+
+      - name: Set executable permissions
+        run: chmod +x ./minishift
+
+      - name: Install Minishift
+        run: sudo mv ./minishift /usr/local/bin/
+
+      - name: Start Minishift cluster
+        run: minishift start --cpus 2 --memory 4096
