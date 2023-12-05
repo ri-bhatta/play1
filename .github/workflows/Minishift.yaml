@@ -1,0 +1,32 @@
+name: Minishift Setup
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v2
+
+    - name: Set up Minishift
+      run: |
+        # Install Minishift (adjust version if needed)
+        curl -Lo minishift https://github.com/minishift/minishift/releases/download/v1.34.0/minishift-linux-amd64
+        chmod +x minishift
+        sudo mv minishift /usr/local/bin
+
+        # Start Minishift
+        minishift start --vm-driver=virtualbox --profile=myprofile --config=minishift-config.yaml
+
+        # Configure OpenShift CLI (oc)
+        eval $(minishift oc-env)
+
+    - name: Deploy Application
+      run: |
+        # Your deployment steps go here
+        # For example, you can use 'oc' commands to deploy your application
+
+    - name: Stop Minishift
+      run: minishift stop --profile=myprofile
