@@ -13,7 +13,7 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Install CRC CLI
-        uses: redhat-actions/crc@v2
+        uses: redhat-actions/crc@latest # Specify the latest CRC version
         with:
           crc-version: latest
 
