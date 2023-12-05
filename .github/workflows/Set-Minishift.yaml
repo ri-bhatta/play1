@@ -23,4 +23,5 @@ jobs:
         run: sudo mv minishift /usr/local/bin/
 
       - name: Start Minishift cluster
-        run: minishift start --cpus 2 --memory 4096
+        run: ./minishift-1.37.2-linux-amd64 start --cpus 2 --memory 4096
+
