@@ -12,10 +12,15 @@ jobs:
 
     - name: Set up Minishift
       run: |
-        # Install Minishift (adjust version if needed)
-        curl -Lo minishift https://github.com/minishift/minishift/releases/download/v1.34.0/minishift-linux-amd64
-        chmod +x minishift
-        sudo mv minishift /usr/local/bin
+        # Install Minishift dependencies
+        sudo apt-get update
+        sudo apt-get install -y socat libvirt-daemon qemu-kvm
+
+        # Download and install Minishift
+        wget https://github.com/minishift/minishift/releases/download/v1.34.0/minishift-1.34.0-linux-amd64.tgz
+        tar -xzf minishift-1.34.0-linux-amd64.tgz
+        sudo mv minishift-1.34.0-linux-amd64/minishift /usr/local/bin/
+        rm -rf minishift-1.34.0-linux-amd64
 
         # Start Minishift
         minishift start --vm-driver=virtualbox --profile=myprofile --config=minishift-config.yaml
